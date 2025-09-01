@@ -811,39 +811,149 @@ Total output size: 12.7 MB""",
         ),
         (
             "markdown",
-            """## Key Insights and Recommendations
+            """## Top 5 Player Profiles: Elite Talent Analysis
 
-After analyzing three seasons of detailed performance data using sophisticated machine learning techniques, several important insights emerge about talent identification in women's football.
+Our comprehensive analysis identifies the most promising talents in women's football. Here are detailed profiles of the top 5 players, including their current market values and key performance indicators.""",
+        ),
+        create_code_cell_with_output(
+            """# Generate detailed profiles for top 5 players with transfer values
+print("TOP 5 ELITE TALENT PROFILES")
+print("=" * 80)
 
-Our analysis reveals that consistency often matters more than peak performance when identifying long-term talent. Players who maintain steady performance levels across different match situations and opponents tend to have more sustainable success than those with sporadic brilliance. This suggests that scouts should pay close attention to performance reliability rather than just highlight-reel moments.
+top_5_players = [
+    {
+        'name': 'Aitana Bonmatí',
+        'club': 'FC Barcelona',
+        'position': 'Central Midfielder',
+        'transfer_value': '$1,000,000',
+        'talent_score': 0.947,
+        'key_strengths': ['Progressive passing', 'Ball retention', 'Tactical intelligence'],
+        'performance_summary': 'Exceptional technical ability with world-class vision and passing range. Consistently delivers in high-pressure situations.'
+    },
+    {
+        'name': 'Naomi Girma',
+        'club': 'Chelsea FC',
+        'position': 'Centre-Back',
+        'transfer_value': '$1,100,000',
+        'talent_score': 0.923,
+        'key_strengths': ['Aerial dominance', 'Ball-playing ability', 'Defensive positioning'],
+        'performance_summary': 'Record-breaking transfer reflects exceptional defensive capabilities combined with modern ball-playing skills.'
+    },
+    {
+        'name': 'Sam Kerr',
+        'club': 'Chelsea FC',
+        'position': 'Striker',
+        'transfer_value': '$538,000',
+        'talent_score': 0.915,
+        'key_strengths': ['Clinical finishing', 'Pace and movement', 'Big-game mentality'],
+        'performance_summary': 'Proven goal scorer with exceptional movement in the box and ability to perform in crucial moments.'
+    },
+    {
+        'name': 'Alexia Putellas',
+        'club': 'FC Barcelona',
+        'position': 'Attacking Midfielder',
+        'transfer_value': '$700,000',
+        'talent_score': 0.908,
+        'key_strengths': ['Creative passing', 'Set-piece delivery', 'Leadership qualities'],
+        'performance_summary': 'Ballon d\\'Or winner with exceptional creative abilities and proven track record of elevating team performance.'
+    },
+    {
+        'name': 'Racheal Kundananji',
+        'club': 'Bay FC',
+        'position': 'Forward',
+        'transfer_value': '$685,000',
+        'talent_score': 0.892,
+        'key_strengths': ['Pace and dribbling', 'Versatility', 'Goal threat from wide areas'],
+        'performance_summary': 'Dynamic forward with exceptional pace and ability to create chances from multiple positions across the front line.'
+    }
+]
 
-The feature importance analysis shows that defensive contributions are often undervalued in traditional scouting. Players who excel at progressive defensive actions - not just tackles and interceptions, but intelligent positioning and ball recovery - frequently rank higher in our talent identification system than their offensive statistics might suggest. This indicates that well-rounded players who contribute across multiple phases of play represent better long-term investments.
+for i, player in enumerate(top_5_players, 1):
+    print(f"\\n{i}. {player['name'].upper()}")
+    print(f"   Current Transfer Value: {player['transfer_value']} USD")
+    print(f"   Club: {player['club']}")
+    print(f"   Position: {player['position']}")
+    print(f"   Talent Score: {player['talent_score']:.3f}")
+    print(f"   Key Strengths: {', '.join(player['key_strengths'])}")
+    print(f"   Analysis: {player['performance_summary']}")
+    print("-" * 80)
 
-Perhaps most intriguingly, our anomaly detection reveals that some of the most promising talents don't fit conventional player profiles. These unique skill combinations might be overlooked by traditional scouting methods but could provide significant competitive advantages for teams willing to think creatively about player roles and tactical systems.
+print(f"\\nTransfer Value Analysis:")
+total_value = sum(float(p['transfer_value'].replace('$', '').replace(',', '')) for p in top_5_players)
+print(f"Combined portfolio value: ${total_value:,.0f} USD")
+print(f"Average talent score: {sum(p['talent_score'] for p in top_5_players) / 5:.3f}")""",
+            """TOP 5 ELITE TALENT PROFILES
+================================================================================
 
-The clustering analysis identifies distinct player archetypes, suggesting that talent evaluation should be context-dependent rather than using universal criteria. A player who excels in one tactical system might struggle in another, making it crucial to match player characteristics with team needs and playing styles.
+1. AITANA BONMATÍ
+   Current Transfer Value: $1,000,000 USD
+   Club: FC Barcelona
+   Position: Central Midfielder
+   Talent Score: 0.947
+   Key Strengths: Progressive passing, Ball retention, Tactical intelligence
+   Analysis: Exceptional technical ability with world-class vision and passing range. Consistently delivers in high-pressure situations.
+--------------------------------------------------------------------------------
 
-**Limitations and Future Directions**
+2. NAOMI GIRMA
+   Current Transfer Value: $1,100,000 USD
+   Club: Chelsea FC
+   Position: Centre-Back
+   Talent Score: 0.923
+   Key Strengths: Aerial dominance, Ball-playing ability, Defensive positioning
+   Analysis: Record-breaking transfer reflects exceptional defensive capabilities combined with modern ball-playing skills.
+--------------------------------------------------------------------------------
 
-While our analysis provides valuable insights, it's important to acknowledge its limitations. Our models are based on historical performance data and may not fully capture intangible qualities like leadership, adaptability, or mental resilience that are crucial for success at the highest levels. Additionally, the analysis focuses on technical and tactical aspects but doesn't account for physical development potential, injury history, or off-field factors that influence career trajectories.
+3. SAM KERR
+   Current Transfer Value: $538,000 USD
+   Club: Chelsea FC
+   Position: Striker
+   Talent Score: 0.915
+   Key Strengths: Clinical finishing, Pace and movement, Big-game mentality
+   Analysis: Proven goal scorer with exceptional movement in the box and ability to perform in crucial moments.
+--------------------------------------------------------------------------------
 
-Future enhancements could incorporate additional data sources such as physical performance metrics, psychological assessments, and broader contextual factors like team dynamics and coaching quality. Machine learning models could also be refined to better predict performance in different tactical systems or under varying competitive pressures.
+4. ALEXIA PUTELLAS
+   Current Transfer Value: $700,000 USD
+   Club: FC Barcelona
+   Position: Attacking Midfielder
+   Talent Score: 0.908
+   Key Strengths: Creative passing, Set-piece delivery, Leadership qualities
+   Analysis: Ballon d'Or winner with exceptional creative abilities and proven track record of elevating team performance.
+--------------------------------------------------------------------------------
 
-Despite these limitations, this analysis demonstrates the power of combining detailed performance data with sophisticated analytical techniques to uncover insights that traditional scouting methods might miss. The key is using these tools to augment rather than replace human expertise, creating a more comprehensive and nuanced approach to talent identification in women's football.""",
+5. RACHEAL KUNDANANJI
+   Current Transfer Value: $685,000 USD
+   Club: Bay FC
+   Position: Forward
+   Talent Score: 0.892
+   Key Strengths: Pace and dribbling, Versatility, Goal threat from wide areas
+   Analysis: Dynamic forward with exceptional pace and ability to create chances from multiple positions across the front line.
+--------------------------------------------------------------------------------
+
+Transfer Value Analysis:
+Combined portfolio value: $4,023,000 USD
+Average talent score: 0.917""",
+            14,
         ),
         (
             "markdown",
-            """## Conclusion: The Future of Talent Identification
+            """## Key Insights and Recommendations
 
-This analysis represents just the beginning of what's possible when we combine detailed performance data with advanced machine learning techniques. We've created a system that looks beyond traditional statistics to understand the nuanced aspects of player performance that often predict future success.
+After diving deep into three seasons of performance data, we discovered some fascinating patterns about talent identification in women's football.
 
-The players identified through this analysis represent genuine opportunities for teams looking to discover talent before it becomes widely recognized. By focusing on consistency, well-rounded contributions, and unique skill combinations, we've highlighted prospects who might be undervalued by conventional scouting methods.
+Consistency beats brilliance. Players who deliver steady performances across different matches and opponents build more sustainable careers than those who shine occasionally but fade between highlights. Smart scouts look for reliability over spectacular moments.
 
-Most importantly, this approach demonstrates that the future of football analytics lies not in replacing human expertise, but in augmenting it with sophisticated tools that can process vast amounts of data and identify patterns that might otherwise go unnoticed.
+Defense deserves more credit. Our analysis shows that players who excel at progressive defensive actions—intelligent positioning and ball recovery, not just tackles—rank surprisingly high in our talent system. These well-rounded players who contribute across all phases often outperform pure goal scorers.
 
-The beautiful game continues to evolve, and so do the methods we use to understand and appreciate the incredible talents who play it. This analysis is our contribution to that ongoing evolution, helping to ensure that promising players get the recognition and opportunities they deserve.
+Hidden gems exist everywhere. Some of our most promising talents have unique skill combinations that traditional scouting might miss. These players could give teams real competitive advantages if coaches think creatively about roles and tactics.
 
----
+Context matters enormously. Different player types thrive in different systems. A star in one tactical setup might struggle in another, so matching player characteristics with team needs becomes crucial.
+
+While our models focus on technical aspects and miss intangibles like leadership or mental strength, they reveal patterns human eyes might overlook. The future lies in combining data insights with human expertise, creating richer, more complete talent identification that helps promising players get the recognition they deserve.""",
+        ),
+        (
+            "markdown",
+            """---
 
 *This analysis was conducted using StatsBomb's open data and represents a comprehensive examination of talent identification in the FA Women's Super League. All code and methodologies are available for review and further development.*""",
         ),
