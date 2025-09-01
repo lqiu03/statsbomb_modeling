@@ -124,12 +124,23 @@ def create_sample_chart(chart_type: str, title: str) -> str:
         else:
             values = [0.95, 0.72, 0.98, 0.89, 0.91, 0.99]
         
+        avg_all_values = [0.65, 0.62, 0.68, 0.71, 0.69, 0.66]
+        
+        avg_top30_values = [0.78, 0.75, 0.81, 0.83, 0.80, 0.79]
+        
         angles = np.linspace(0, 2 * np.pi, len(metrics), endpoint=False).tolist()
+        
         values += values[:1]
+        avg_all_values += avg_all_values[:1]
+        avg_top30_values += avg_top30_values[:1]
         angles += angles[:1]
         
-        ax.plot(angles, values, 'o-', linewidth=2, color='steelblue')
+        ax.plot(angles, avg_all_values, '--', linewidth=1.5, color='lightgray', alpha=0.7, label='All Players Average')
+        ax.plot(angles, avg_top30_values, '--', linewidth=1.5, color='gray', alpha=0.8, label='Top 30 Players Average')
+        
+        ax.plot(angles, values, 'o-', linewidth=2, color='steelblue', label='Player Performance')
         ax.fill(angles, values, alpha=0.25, color='steelblue')
+        
         ax.set_xticks(angles[:-1])
         ax.set_xticklabels(metrics)
         ax.set_ylim(0, 1)
@@ -137,6 +148,7 @@ def create_sample_chart(chart_type: str, title: str) -> str:
         ax.set_yticklabels(['20%', '40%', '60%', '80%', '100%'])
         ax.grid(True)
         ax.set_title(title, fontsize=14, fontweight='bold', pad=30)
+        ax.legend(loc='upper right', bbox_to_anchor=(1.3, 1.0))
     
     else:
         fig, ax = plt.subplots(figsize=(8, 6))
