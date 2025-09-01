@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "statsbomb-talent-scouting"
 version = "0.1.0"
-description = "Advanced ML system for soccer talent scouting using StatsBomb FA Women's Super League data"
+description = "Advanced ML system for soccer talent scouting and RAG-powered chatbot using StatsBomb data"
 authors = ["Lucas Qiu <lqiu03@g.ucla.edu>"]
 readme = "README.md"
 
@@ -23,6 +23,11 @@ optuna = "^3.5.0"
 requests = "^2.31.0"
 tqdm = "^4.66.0"
 scipy = "^1.12.0"
+chromadb = "^0.4.0"
+sentence-transformers = "^2.2.0"
+google-generativeai = "^0.3.0"
+fastapi = "^0.104.0"
+uvicorn = "^0.24.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.1.0"
