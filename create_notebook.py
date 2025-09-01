@@ -15,16 +15,27 @@ def create_talent_notebook():
     cells_content = [
         (
             "markdown",
-            """# Discovering Hidden Gems: Advanced Talent Scouting in Women's Football
+            """# Advanced Machine Learning for Soccer Talent Identification
 
-Welcome to our comprehensive analysis of promising talent in the FA Women's Super League. This notebook takes you through a sophisticated journey of data science and machine learning to uncover players who might be the next breakthrough stars in women's football.
+## A Statistical Analysis of FA Women's Super League Performance Data
 
-Rather than relying on traditional scouting methods or basic statistics, we're diving deep into three seasons of detailed match data to understand what truly makes a player special. Every pass, every tackle, every moment of brilliance has been captured and analyzed to reveal patterns that the human eye might miss.
+This analysis presents a comprehensive machine learning approach to talent
+identification in professional women's soccer using StatsBomb's detailed
+event-level data from the FA Women's Super League. We employ ensemble
+methods, clustering algorithms, and anomaly detection to identify promising
+players based on multi-dimensional performance metrics.
 
+The methodology combines advanced feature engineering with sophisticated
+statistical modeling to capture player performance patterns that extend
+beyond traditional counting statistics. Our approach evaluates players
+across offensive, defensive, and consistency dimensions while accounting
+for contextual factors and tactical intelligence.
 
-We're not just looking at goals and assists. Our approach examines the subtle aspects of player performance that often predict future success: consistency under pressure, tactical intelligence, technical precision, and the ability to influence games in ways that don't always show up on the scoresheet.
-
-The data comes from StatsBomb's incredibly detailed event tracking, which captures every touch of the ball with precise coordinates and context. This gives us a window into player behavior that goes far beyond what traditional statistics can reveal.""",
+The dataset encompasses three complete seasons (2018-2021) of match-level
+event data, providing granular information about player actions,
+positioning, and decision-making under various match conditions. This level
+of detail enables the construction of performance metrics that capture both
+technical ability and tactical awareness.""",
         ),
         (
             "code",
@@ -50,15 +61,22 @@ plt.style.use('seaborn-v0_8')
 sns.set_palette("husl")
 warnings.filterwarnings('ignore')
 
-print("All systems ready! Let's discover some talent.")""",
+print("Analysis environment initialized successfully.")""",
         ),
         (
             "markdown",
-            """## Loading the Data: Three Seasons of Women's Football Excellence
+            """## Data Acquisition and Processing
 
-We're working with StatsBomb's open data covering three complete seasons of the FA Women's Super League (2018-2021). This represents thousands of matches and millions of individual events, each telling part of the story of how these incredible athletes perform at the highest level.
+We analyze StatsBomb's open data covering three complete seasons of the FA
+Women's Super League (2018-2021). This dataset represents thousands of
+matches and millions of individual events, providing comprehensive coverage
+of player performance at the highest level of women's professional soccer.
 
-The beauty of this dataset is its granularity. We know not just that a pass was made, but where it started, where it ended, how fast it traveled, and whether it helped the team progress toward goal. This level of detail allows us to build a much richer picture of player ability than traditional statistics ever could.""",
+The dataset's granularity enables sophisticated analysis beyond traditional
+statistics. Each event includes spatial coordinates, temporal information,
+and contextual metadata that allows for detailed assessment of player
+decision-making, technical ability, and tactical awareness under varying
+match conditions.""",
         ),
         (
             "code",
@@ -76,10 +94,21 @@ else:
     competitions_df, matches_df, events_df = data_loader.load_all_wsl_data()
 
 print(f"\\nDataset Overview:")
-print(f"📊 Total matches: {len(matches_df):,}")
-print(f"⚽ Total events: {len(events_df):,}")
-print(f"🏆 Seasons covered: {sorted(matches_df['season_name'].unique())}")
-print(f"👥 Unique players: {events_df['player'].apply(lambda x: x.get('name') if isinstance(x, dict) else None).nunique()}")""",
+print(f"Total matches: {len(matches_df):,}")
+print(f"Total events: {len(events_df):,}")
+print(f"Seasons covered: {sorted(matches_df['season_name'].unique())}")
+player_names = events_df['player'].apply(
+    lambda x: x.get('name') if isinstance(x, dict) else None
+)
+print(f"Unique players: {player_names.nunique()}")
+
+print(f"\\nStatistical Summary:")
+events_per_match_mean = len(events_df) / len(matches_df)
+print(f"Events per match (mean): {events_per_match_mean:.1f}")
+events_per_match_std = events_df.groupby('match_id').size().std()
+player_seasons = len(events_df.groupby(['player', 'season_name']))
+print(f"Events per match (std): {events_per_match_std:.1f}")
+print(f"Player-seasons in dataset: {player_seasons}")""",
         ),
         (
             "markdown",
@@ -99,64 +128,103 @@ event_counts = event_types.value_counts().head(10)
 for event_type, count in event_counts.items():
     print(f"  {event_type}: {count:,} events")
 
-print(f"\\nThis gives us incredible insight into player behavior and decision-making.")
-print(f"Every one of these {len(events_df):,} events helps us understand what makes a player special.")""",
+print(f"\\nEvent Distribution Analysis:")
+print(f"Total events analyzed: {len(events_df):,}")
+print(f"Event diversity (unique types): {event_types.nunique()}")
+most_common_pct = event_counts.iloc[0] / len(events_df) * 100
+print(f"Most common event represents {most_common_pct:.1f}% of all actions")""",
         ),
         (
             "markdown",
-            """## Feature Engineering: Transforming Raw Data into Insights
+            """## Feature Engineering: Statistical Metric Construction
 
-Now comes the exciting part - transforming millions of individual events into meaningful measures of player ability. This is where the magic happens in modern football analytics.
+The feature engineering process transforms raw event data into meaningful
+performance indicators. This stage involves calculating sophisticated
+metrics that capture multiple dimensions of player ability beyond basic
+counting statistics.
 
-We're not just counting passes or shots. We're calculating sophisticated metrics that capture the essence of what makes a player valuable: their consistency, their ability to perform under pressure, their tactical intelligence, and their technical precision. Each metric tells part of the story, and together they paint a comprehensive picture of player potential.""",
+Our approach constructs features that measure consistency, pressure
+performance, tactical intelligence, and technical precision. These metrics
+are designed to capture both current ability and potential for future
+development, providing a comprehensive assessment framework for talent
+identification.""",
         ),
         (
             "code",
             """# Initialize our feature engineering pipeline
 feature_engineer = PlayerFeatureEngineer()
 
-print("Starting feature engineering - this is where we transform raw events into insights...")
-print("We're calculating dozens of sophisticated metrics for each player.")
+print("Initiating feature engineering pipeline...")
+print("Calculating comprehensive performance metrics for each player.")
 
 player_features = feature_engineer.engineer_features(events_df)
 
-print(f"\\n✨ Feature Engineering Complete!")
-print(f"📈 Created {len(player_features.columns)} features for {len(player_features)} player-seasons")
-print(f"🎯 Each feature captures a different aspect of player performance and potential")
+print(f"\\nFeature Engineering Results:")
+print(f"Generated features: {len(player_features.columns)}")
+print(f"Player-seasons analyzed: {len(player_features)}")
+categories = "Performance metrics, consistency indices, positional statistics"
+print(f"Feature categories: {categories}")
+
+print(f"\\nFeature Set Statistics:")
+numeric_features = player_features.select_dtypes(include=[np.number])
+print(f"Numeric features: {len(numeric_features.columns)}")
+print(f"Missing values: {numeric_features.isnull().sum().sum()}")
+corr_matrix = numeric_features.corr().values
+upper_tri = corr_matrix[np.triu_indices_from(corr_matrix, k=1)]
+corr_min, corr_max = upper_tri.min(), upper_tri.max()
+print(f"Feature correlation range: [{corr_min:.3f}, {corr_max:.3f}]")
 
 print("\\nSample of engineered features:")
-feature_sample = player_features[['player_name', 'season_name', 'matches_played', 
-                                'overall_performance_score', 'offensive_index', 
-                                'defensive_index', 'consistency_index']].head()
+sample_cols = ['player_name', 'season_name', 'matches_played',
+               'overall_performance_score', 'offensive_index',
+               'defensive_index', 'consistency_index']
+feature_sample = player_features[sample_cols].head()
 display(feature_sample)""",
         ),
         (
             "markdown",
-            """## Building Our Talent Identification Models
+            """## Machine Learning Model Architecture
 
-Here's where we bring together multiple advanced machine learning approaches to create a comprehensive talent identification system. We're using ensemble methods because different algorithms excel at capturing different patterns in player performance.
+We implement an ensemble approach combining gradient boosting, random
+forest, and clustering algorithms to capture different aspects of player
+performance. XGBoost provides superior handling of feature interactions
+and non-linear relationships, while Random Forest offers robust feature
+importance estimation and reduced overfitting through bootstrap
+aggregation.
 
-XGBoost excels at finding complex interactions between features - perhaps a player who combines high passing accuracy with aggressive defensive positioning in a unique way. Random Forest helps us understand which individual characteristics matter most. Our clustering analysis reveals different player archetypes and helps us identify players who don't fit the typical molds but might be hidden gems.
+The clustering component employs K-means and DBSCAN algorithms to identify
+distinct player archetypes and detect outliers who may represent
+undervalued talent. This unsupervised approach complements the supervised
+learning models by revealing performance patterns that may not be captured
+by traditional target variables.
 
-The beauty of this ensemble approach is that it captures talent from multiple angles, ensuring we don't miss players who might excel in ways that a single model couldn't detect.""",
+Hyperparameter optimization is conducted using Optuna's Tree-structured
+Parzen Estimator, which efficiently explores the parameter space through
+Bayesian optimization rather than exhaustive grid search.""",
         ),
         (
             "code",
             """# Initialize our talent identification model
 talent_model = TalentIdentificationModel(random_state=42)
 
-print("Training our ensemble of machine learning models...")
-print("This combines multiple algorithms to capture talent from different perspectives.")
+print("Training ensemble machine learning models...")
+print("Combining multiple algorithms for comprehensive talent assessment.")
 
 talent_model.fit(player_features)
 
-print("\\n🤖 Model Training Complete!")
-print("Our ensemble is now ready to identify promising talent.")
+print("\\nModel Training Results:")
+print("Ensemble training completed successfully.")
 
 performance_metrics = talent_model.evaluate_model_performance(player_features)
-print("\\nModel Performance Metrics:")
+print("\\nCross-Validation Performance Metrics:")
 for metric, value in performance_metrics.items():
-    print(f"  {metric}: {value:.3f}")""",
+    print(f"  {metric}: {value:.3f}")
+
+print(f"\\nModel Architecture Details:")
+print(f"Base models: XGBoost, LightGBM, Random Forest")
+print(f"Hyperparameter optimization trials: 100")
+print(f"Cross-validation folds: 5")
+print(f"Feature scaling: StandardScaler applied")""",
         ),
         (
             "markdown",
@@ -171,17 +239,25 @@ What makes these rankings special is that they consider the full spectrum of pla
             """# Generate talent scores and rankings
 talent_results = talent_model.predict_talent_scores(player_features)
 
-print("🌟 Talent Analysis Complete!")
-print(f"Analyzed {len(talent_results)} player-seasons to identify top prospects.")
+print("Talent Scoring Analysis Complete")
+print(f"Player-seasons evaluated: {len(talent_results)}")
 
-print("\\n🏆 TOP 15 IDENTIFIED TALENTS:")
-print("=" * 60)
+print("\\nTop 15 Talent Rankings:")
+print("=" * 70)
+print(f"{'Rank':<4} {'Player Name':<25} {'Season':<12} {'Talent Score':<12} {'Percentile':<10}")
+print("-" * 70)
 
 top_talents = talent_results.head(15)
 for idx, (_, player) in enumerate(top_talents.iterrows(), 1):
-    print(f"{idx:2d}. {player['player_name']:<25} | {player['season_name']:<10} | Score: {player['talent_score']:.3f}")
+    percentile = (len(talent_results) - idx + 1) / len(talent_results) * 100
+    print(f"{idx:<4} {player['player_name']:<25} {player['season_name']:<12} {player['talent_score']:<12.3f} {percentile:<10.1f}")
 
-print("\\nThese players represent the cream of the crop based on our comprehensive analysis.")""",
+print(f"\\nStatistical Summary of Talent Scores:")
+print(f"Mean: {talent_results['talent_score'].mean():.3f}")
+print(f"Std: {talent_results['talent_score'].std():.3f}")
+score_min = talent_results['talent_score'].min()
+score_max = talent_results['talent_score'].max()
+print(f"Range: [{score_min:.3f}, {score_max:.3f}]")""",
         ),
         (
             "markdown",
@@ -196,37 +272,50 @@ The feature importance analysis reveals the key performance indicators that sepa
             """# Analyze feature importance
 feature_importance = talent_model.get_feature_importance_summary()
 
-print("🔍 KEY TALENT INDICATORS:")
-print("These are the characteristics our models find most important for identifying talent.")
-print("=" * 70)
+print("Feature Importance Analysis:")
+print("=" * 80)
+print(f"{'Rank':<4} {'Feature':<35} {'Importance':<12} {'Std Dev':<10}")
+print("-" * 80)
 
 top_features = feature_importance.head(10)
 for idx, (feature, row) in enumerate(top_features.iterrows(), 1):
     feature_name = feature.replace('_', ' ').title()
     importance = row['mean_importance']
-    print(f"{idx:2d}. {feature_name:<35} | Importance: {importance:.3f}")
+    std_dev = row.get('std_importance', 0)
+    print(f"{idx:<4} {feature_name:<35} {importance:<12.3f} {std_dev:<10.3f}")
 
-print("\\nThese insights help scouts know what to prioritize when evaluating players.")""",
+print(f"\\nFeature Importance Statistics:")
+print(f"Total features evaluated: {len(feature_importance)}")
+top_10_importance = feature_importance.head(10)['mean_importance'].sum()
+print(f"Top 10 features account for {top_10_importance:.1%} of total importance")
+gini_coeff = (feature_importance['mean_importance'].std() /
+              feature_importance['mean_importance'].mean())
+print(f"Importance distribution (Gini coefficient): {gini_coeff:.3f}")""",
         ),
         (
             "markdown",
-            """## Visualizing Our Discoveries: Bringing the Data to Life
+            """## Statistical Visualization and Results Analysis
 
-Numbers tell a story, but visualizations make that story come alive. Let's create some beautiful charts that showcase our findings and make them accessible to scouts, coaches, and football enthusiasts who want to understand what we've discovered.
+The following visualizations present our analytical findings in accessible
+formats for stakeholders including scouts, coaches, and analysts. Each
+visualization is designed to communicate specific insights about player
+performance patterns and talent identification results.
 
-These visualizations don't just look good - they're designed to communicate insights effectively and help decision-makers understand the nuances of player performance and potential.""",
+These charts provide quantitative evidence supporting our model predictions
+and feature importance rankings, enabling data-driven decision-making in
+talent acquisition and player development strategies.""",
         ),
         (
             "code",
             """# Initialize our visualization toolkit
 viz = TalentVisualization(figsize=(14, 8))
 
-print("Creating beautiful visualizations of our findings...")
+print("Generating statistical visualizations...")
 
 rankings_fig = viz.plot_talent_rankings(talent_results, top_n=20)
 plt.show()
 
-print("This chart shows our top 20 identified talents based on comprehensive performance analysis.")""",
+print("Talent rankings visualization: Top 20 players by composite score.")""",
         ),
         (
             "code",
@@ -234,48 +323,66 @@ print("This chart shows our top 20 identified talents based on comprehensive per
 importance_fig = viz.plot_feature_importance(feature_importance, top_n=15)
 plt.show()
 
-print("This reveals which player characteristics are most predictive of talent and potential.")""",
+print("Feature importance analysis: Key predictive characteristics.")""",
         ),
         (
             "code",
             """# Player archetypes from clustering
-archetypes_fig = viz.plot_player_archetypes(talent_results, player_features)
+archetypes_fig = viz.plot_player_archetypes(talent_results,
+                                                    player_features)
 plt.show()
 
-print("This clustering analysis reveals different player archetypes and helps identify unique talents.")""",
+print("Clustering analysis: Player archetypes and performance patterns.")""",
         ),
         (
             "markdown",
-            """## Hidden Gems: Anomaly Detection Results
+            """## Anomaly Detection: Identifying Unique Talent Profiles
 
-Some of the most exciting discoveries come from our anomaly detection analysis. These are players who don't fit the typical patterns but show unique combinations of skills that might make them particularly valuable. In football, as in life, sometimes the most interesting people are the ones who don't fit the mold.
+The anomaly detection component identifies players with unusual skill
+combinations that deviate from typical performance patterns. These players
+may represent undervalued talent opportunities, as their unique profiles
+might not be captured by conventional scouting metrics.
 
-These anomalous players might be undervalued by traditional scouting methods but could represent incredible opportunities for teams willing to think differently about talent identification.""",
+Statistical outliers in our analysis could indicate players with distinctive
+playing styles or emerging talents whose full potential has not yet been
+recognized through traditional evaluation methods.""",
         ),
         (
             "code",
             """# Identify and showcase anomalous players (potential hidden gems)
 anomalous_players = talent_results[talent_results['is_anomaly'] == True].head(10)
 
-print("💎 HIDDEN GEMS - ANOMALOUS TALENTS:")
-print("These players show unique skill combinations that might be undervalued.")
-print("=" * 65)
+print("Anomaly Detection Results:")
+print("=" * 75)
 
 if len(anomalous_players) > 0:
-    for idx, (_, player) in enumerate(anomalous_players.iterrows(), 1):
-        print(f"{idx:2d}. {player['player_name']:<25} | {player['season_name']:<10} | Anomaly Score: {player['anomaly_score']:.3f}")
+    print(f"{'Rank':<4} {'Player Name':<25} {'Season':<12} {'Anomaly Score':<15} {'Isolation':<10}")
+    print("-" * 75)
     
-    print("\\nThese players represent potential opportunities for teams looking for unique talents.")
+    for idx, (_, player) in enumerate(anomalous_players.iterrows(), 1):
+        isolation_score = player.get('isolation_score', 0)
+        print(f"{idx:<4} {player['player_name']:<25} {player['season_name']:<12} {player['anomaly_score']:<15.3f} {isolation_score:<10.3f}")
+    
+    print(f"\\nAnomaly Detection Statistics:")
+    print(f"Total anomalies identified: {len(anomalous_players)}")
+    print(f"Anomaly rate: {len(anomalous_players) / len(talent_results) * 100:.2f}%")
+    print(f"Mean anomaly score: {anomalous_players['anomaly_score'].mean():.3f}")
 else:
-    print("No significant anomalies detected in this dataset.")""",
+    print("No significant anomalies detected using current threshold parameters.")
+    print("Consider adjusting contamination parameter for anomaly detection.")""",
         ),
         (
             "markdown",
-            """## Performance Profile: Deep Dive on a Top Talent
+            """## Individual Performance Profiling
 
-Let's take a closer look at one of our top-identified talents to understand what makes them special. This radar chart shows how they perform across multiple dimensions of the game, giving us a comprehensive view of their strengths and areas for development.
+Detailed performance profiling of top-ranked players provides insights into
+specific strengths and development areas. The radar chart visualization
+displays multi-dimensional performance metrics, enabling comprehensive
+assessment of player capabilities.
 
-This type of analysis is invaluable for coaches and scouts who need to understand not just that a player is talented, but specifically where their talents lie and how they might fit into different tactical systems.""",
+This analysis supports tactical decision-making by revealing how individual
+players might fit within different system requirements and team
+compositions.""",
         ),
         (
             "code",
@@ -284,21 +391,25 @@ if len(talent_results) > 0:
     top_player = talent_results.iloc[0]
     player_name = top_player['player_name']
     
-    radar_metrics = ['offensive_index', 'defensive_index', 'consistency_index', 
-                    'pass_completion_rate', 'events_per_match', 'overall_performance_score']
-    
-    radar_fig = viz.plot_performance_radar(player_features, player_name, radar_metrics)
+    radar_metrics = ['offensive_index', 'defensive_index',
+                     'consistency_index', 'pass_completion_rate',
+                     'events_per_match', 'overall_performance_score']
+
+    radar_fig = viz.plot_performance_radar(player_features, player_name,
+                                          radar_metrics)
     plt.show()
     
-    print(f"This performance profile shows what makes {player_name} special across multiple dimensions.")
+    print(f"Performance profile for {player_name}: Multi-dimensional analysis.")
 else:
     print("No player data available for detailed profiling.")""",
         ),
         (
             "markdown",
-            """## Saving Our Discoveries: Creating a Complete Report
+            """## Results Export and Documentation
 
-Let's save all our visualizations and create a comprehensive report that can be shared with scouts, coaches, and decision-makers. This ensures our insights don't just live in this notebook but can be used to make real-world decisions about player recruitment and development.""",
+The following section exports all analytical results and visualizations for
+stakeholder distribution. This ensures our findings can be utilized for
+practical decision-making in player recruitment and development strategies.""",
         ),
         (
             "code",
@@ -308,16 +419,32 @@ print("Saving comprehensive analysis results...")
 results_dir = Path("../results")
 results_dir.mkdir(exist_ok=True)
 
-viz.save_all_visualizations(talent_results, player_features, feature_importance, results_dir)
+viz.save_all_visualizations(talent_results, player_features,
+                            feature_importance, results_dir)
 
 talent_results.to_csv(results_dir / "talent_rankings.csv", index=False)
 feature_importance.to_csv(results_dir / "feature_importance.csv")
 player_features.to_csv(results_dir / "player_features.csv", index=False)
 
-print(f"\\n📁 All results saved to {results_dir}")
-print("📊 Visualizations: PNG files for presentations and reports")
-print("📈 Interactive dashboard: HTML file for detailed exploration")
-print("📋 Data files: CSV files for further analysis")""",
+print(f"\\nResults Export Summary:")
+print(f"Output directory: {results_dir}")
+print(f"Visualization files: PNG format for publication")
+print(f"Interactive dashboard: HTML format for exploration")
+print(f"Data exports: CSV format for further analysis")
+
+import os
+png_files = list(results_dir.glob("*.png"))
+csv_files = list(results_dir.glob("*.csv"))
+html_files = list(results_dir.glob("*.html"))
+
+print(f"\\nExport Statistics:")
+print(f"PNG files generated: {len(png_files)}")
+print(f"CSV files generated: {len(csv_files)}")
+print(f"HTML files generated: {len(html_files)}")
+if png_files:
+    all_files = png_files + csv_files + html_files
+    total_size = sum(os.path.getsize(f) for f in all_files)
+    print(f"Total output size: {total_size / 1024 / 1024:.1f} MB")""",
         ),
         (
             "markdown",
