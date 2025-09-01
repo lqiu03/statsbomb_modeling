@@ -135,8 +135,8 @@ def create_sample_chart(chart_type: str, title: str) -> str:
         avg_top30_values += avg_top30_values[:1]
         angles += angles[:1]
         
-        ax.plot(angles, avg_all_values, '--', linewidth=1.5, color='lightgray', alpha=0.7, label='All Players Average')
-        ax.plot(angles, avg_top30_values, '--', linewidth=1.5, color='gray', alpha=0.8, label='Top 30 Players Average')
+        ax.plot(angles, avg_all_values, '--', linewidth=1.8, color='darkgray', alpha=0.9, label='All Players Average')
+        ax.plot(angles, avg_top30_values, '--', linewidth=1.8, color='gray', alpha=0.9, label='Top 30 Players Average')
         
         ax.plot(angles, values, 'o-', linewidth=2, color='steelblue', label='Player Performance')
         ax.fill(angles, values, alpha=0.25, color='steelblue')
